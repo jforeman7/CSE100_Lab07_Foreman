@@ -28,7 +28,7 @@ void MinHeapify(int* A, int A_size, int i)
 	else
 		smallest = i;
 
-	if (r < A_size && A[r] > A[smallest])
+	if (r < A_size && A[r] < A[smallest])
 		smallest = r;
 
 	// If A[i] is smallest, then done.
