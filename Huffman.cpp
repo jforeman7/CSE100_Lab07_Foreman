@@ -37,7 +37,7 @@ void MinHeapify(int* A, int A_size, int i)
 	{
 		swap(A[i], A[smallest]);
 
-		MaxHeapify(A, A_size, smallest);
+		MinHeapify(A, A_size, smallest);
 	}
 }
 
