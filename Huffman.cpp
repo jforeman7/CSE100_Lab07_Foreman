@@ -2,91 +2,103 @@
 // CSE 100 03L
 // Lab 07: Huffman Codes
 // 30 Oct 2017
-// Changed my heapsort code to create a MinHeap.
 
-#include <iostream>
-#include <stdlib.h>
-#include <string>
-#include <utility> // For Swap.
-
+// C++ program for Huffman Coding
+#include <bits/stdc++.h>
 using namespace std;
 
-// Must add 1, to account for change in index start from textbook pseudocode.
-int Parent(int i) { return i / 2; }
-int Left(int i) { return 2 * i + 1; }
-int Right(int i) { return 2 * i + 2; }
-
-void MinHeapify(int* A, int A_size, int i)
+// A Huffman tree node
+struct MinHeapNode
 {
-	int l = Left(i);
-	int r = Right(i);
-	int smallest;
+    char data;                // One of the input characters
+    unsigned freq;             // Frequency of the character
+    MinHeapNode *left, *right; // Left and right child
 
-	// Look for the smallest value, and store its index value in "smallest".
-	if (l < A_size && A[l] < A[i])
-		smallest = l;
-	else
-		smallest = i;
+    MinHeapNode(char data, unsigned freq)
+    {
+	left = right = NULL;
+	this->data = data;
+	this->freq = freq;
+    }
+};
 
-	if (r < A_size && A[r] < A[smallest])
-		smallest = r;
+// For comparison of two heap nodes (needed in min heap)
+struct compare
+{
+    bool operator()(MinHeapNode* l, MinHeapNode* r)
+    {
+	return (l->freq > r->freq);
+    }
+};
 
-	// If A[i] is smallest, then done.
-	// Otherwise we must swap and then start again, as the max heap property may be violated.
-	if (smallest != i)
-	{
-		swap(A[i], A[smallest]);
+// Prints huffman codes from the root of Huffman Tree.
+void printCodes(struct MinHeapNode* root, string str)
+{
+    if (!root)
+	return;
 
-		MinHeapify(A, A_size, smallest);
-	}
+    if (root->data != '$')
+	cout << root->data << ": " << str << "\n";
+
+    printCodes(root->left, str + "0");
+    printCodes(root->right, str + "1");
 }
 
-void BuildMinHeap(int* A, int A_size)
+// The main function that builds a Huffman Tree and
+// print codes by traversing the built Huffman Tree
+void HuffmanCodes(char data[], int freq[], int size)
 {
-	// Ensures smallest value is at root, to satisfy max heap property.
-	for(int i = A_size / 2 - 1; i >= 0; i--)
-		MinHeapify(A, A_size, i);
+    struct MinHeapNode *left, *right, *top;
+
+    // Create a min heap & inserts all characters of data[]
+    priority_queue<MinHeapNode*, vector<MinHeapNode*>, compare> minHeap;
+    for (int i = 0; i < size; ++i)
+	minHeap.push(new MinHeapNode(data[i], freq[i]));
+
+    // Iterate while size of heap doesn't become 1
+    while (minHeap.size() != 1)
+    {
+	// Extract the two minimum freq items from min heap
+	left = minHeap.top();
+	minHeap.pop();
+
+	right = minHeap.top();
+	minHeap.pop();
+
+	// Create a new internal node with frequency equal to the
+	// sum of the two nodes frequencies. Make the two extracted
+	// node as left and right children of this new node. Add
+	// this node to the min heap
+	// '$' is a special value for internal nodes, not used
+	top = new MinHeapNode('$', left->freq + right->freq);
+	top->left = left;
+	top->right = right;
+	minHeap.push(top);
+    }
+
+    // Print Huffman codes using the Huffman tree built above
+    printCodes(minHeap.top(), "");
 }
 
-void HeapSort(int* A, int A_size)
+// Driver program to test above functions
+int main()
 {
-	BuildMinHeap(A, A_size);
+	int size;
+	cin >> size;
+	
+    char *arr;
+	arr = new char[size];
+	
+	for (int i = 0; i < size; i++)
+		arr[i] = 'a';
+	
+	int *freq;
+	freq = new int[size];
+	
+	for (int i = 0; i < size; i++)
+		cin >> freq[i];
+	
+    HuffmanCodes(arr, freq, size);
 
-	for(int i = A_size - 1; i >= 1; i--)
-	{
-		swap(A[0], A[i]);
-
-		//Largest value is now at the end, so "cut" off that node.
-		A_size--;
-
-		// Re-Heap.
-		MinHeapify(A, A_size, 0);
-	}
-}
-
-
-int main(int argc,char **argv) {
-
-  int *Sequence;
-  int arraySize;
-
-  // Get the size of the sequence
-  cin >> arraySize;
-
-  // Allocate enough memory to store "arraySize" integers
-  Sequence = new int[arraySize];
-
-  // Read in the sequence
-  for ( int i=0; i<arraySize; i++ )
-    cin >> Sequence[i];
-
-  // Run your algorithms to manipulate the elements in Sequence
-  HeapSort(Sequence, arraySize);
-
-  // Output the result
-  for(int i=0; i<arraySize; i++)
-      cout << Sequence[i] << endl;
-
-  // Free allocated space
-  delete[] Sequence;
+    return 0;
 }
