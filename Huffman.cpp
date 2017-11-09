@@ -101,11 +101,12 @@ public:
 	 
   std::vector<char> data;
   std::vector<size_t> freq;
-	 
+	 int temp;
 	 for (int i = 0; i < size; i++)
 	 {
-			data[i] = 'a';
-		 	cin >> freq[i];
+			data.push_back('a');
+		 	cin >> temp;
+		 	freq.push_back(temp);
 	 }
   set1.GenerateCode(data, freq, size);
 
