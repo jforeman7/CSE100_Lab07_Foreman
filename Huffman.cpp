@@ -47,3 +47,46 @@ void BuildMinHeap(int* A, int A_size)
 	for(int i = A_size / 2 - 1; i >= 0; i--)
 		MinHeapify(A, A_size, i);
 }
+
+void HeapSort(int* A, int A_size)
+{
+	BuildMinHeap(A, A_size);
+
+	for(int i = A_size - 1; i >= 1; i--)
+	{
+		swap(A[0], A[i]);
+
+		//Largest value is now at the end, so "cut" off that node.
+		A_size--;
+
+		// Re-Heap.
+		MinHeapify(A, A_size, 0);
+	}
+}
+
+
+int main(int argc,char **argv) {
+
+  int *Sequence;
+  int arraySize;
+
+  // Get the size of the sequence
+  cin >> arraySize;
+
+  // Allocate enough memory to store "arraySize" integers
+  Sequence = new int[arraySize];
+
+  // Read in the sequence
+  for ( int i=0; i<arraySize; i++ )
+    cin >> Sequence[i];
+
+  // Run your algorithms to manipulate the elements in Sequence
+  HeapSort(Sequence, arraySize);
+
+  // Output the result
+  for(int i=0; i<arraySize; i++)
+      cout << Sequence[i] << endl;
+
+  // Free allocated space
+  delete[] Sequence;
+}
