@@ -20,8 +20,8 @@ class HuffmanCodes
   Node* right;
   Node(char data, size_t freq) : data(data),
                                  freq(freq),
-                                 left(null),
-                                 right(null)
+                                 left(NULL),
+                                 right(NULL)
                                  {}
  ~Node()
  {
@@ -42,7 +42,7 @@ Node* top;
 
 void printCode(Node* root, std::string str)
 {
-  if(root == nullptr)
+  if(root == NULL)
    return;
 
  if(root->data == '$')
