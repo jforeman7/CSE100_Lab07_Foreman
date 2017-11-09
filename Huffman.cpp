@@ -1,6 +1,3 @@
-Skip to content
-This repository
-Search
 // Jeff Foreman
 // CSE 100 03L
 // Lab 07: Huffman Codes
