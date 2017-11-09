@@ -20,8 +20,8 @@ class HuffmanCodes
   Node* right;
   Node(char data, size_t freq) : data(data),
                                  freq(freq),
-                                 left(nullptr),
-                                 right(nullptr)
+                                 left(null),
+                                 right(null)
                                  {}
  ~Node()
  {
